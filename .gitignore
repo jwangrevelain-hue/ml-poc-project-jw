@@ -318,3 +318,9 @@ http-client.private.env.json
 # Exclude logs directory
 logs/*
 !logs/.gitkeep
+
+# Exclude raw datasets (too large for GitHub, GitHub limit = 100 MB per file)
+data/*.csv
+data/*.zip
+data/*.parquet
+!data/.gitkeep
