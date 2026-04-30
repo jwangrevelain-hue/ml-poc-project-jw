@@ -324,3 +324,6 @@ data/*.csv
 data/*.zip
 data/*.parquet
 !data/.gitkeep
+
+# macOS
+.DS_Store
