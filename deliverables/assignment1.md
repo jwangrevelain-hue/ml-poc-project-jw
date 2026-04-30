@@ -17,6 +17,27 @@ Fournir un outil d'aide à la décision fiable :
 - **Pour les vendeurs** : estimer le prix de vente optimal pour vendre rapidement sans brader le véhicule.
 - **Pour les acheteurs** : identifier rapidement les "bonnes affaires" (véhicules sous-cotés) et éviter les arnaques.
 
+### Positionnement par rapport au marché existant
+
+Sur le marché européen, la **cote Argus** (publiée depuis 1927 par *L'Argus de l'automobile*) fait office de référence quasi-incontournable pour estimer le prix d'un véhicule d'occasion. Elle est utilisée par les concessionnaires, les banques, les assureurs et les particuliers. Aux États-Unis, des équivalents comme **Kelley Blue Book** ou **Edmunds** jouent le même rôle.
+
+Ces solutions présentent toutefois **plusieurs limites du point de vue business** :
+
+| Limite | Conséquence |
+|---|---|
+| **Coût d'accès élevé** | Les API professionnelles (Argus B2B, KBB API, Edmunds API) sont vendues sur abonnement à des tarifs élevés (plusieurs milliers d'euros / mois pour un accès en volume), ce qui les rend inaccessibles aux petits acteurs et aux particuliers |
+| **Opacité du modèle de pricing** | Les méthodologies sont propriétaires et peu documentées : on ne sait pas exactement quels critères sont pondérés, ni comment, ni avec quelle fraîcheur des données. Impossible de comprendre pourquoi un véhicule est coté à un certain prix. |
+| **Couverture géographique limitée** | L'Argus couvre la France, KBB les États-Unis : aucune solution unifiée n'existe pour comparer les marchés ou pour les zones géographiques moins couvertes |
+| **Granularité figée** | Les paramètres pris en compte sont définis par l'éditeur ; impossible de personnaliser la prédiction selon des features spécifiques (saisonnalité régionale, type d'usage, etc.) |
+
+**Apport de ce projet** : développer un modèle d'estimation **transparent**, **personnalisable** et **gratuit**, dont la logique de prédiction est entièrement auditable (poids des features visibles, données d'entraînement connues, méthodologie reproductible). Le POC est construit sur le marché US (dataset Craigslist disponible publiquement), mais l'architecture est directement transposable à d'autres géographies dès lors qu'un dataset équivalent est disponible.
+
+**Pourquoi assumer le choix de données utilisateur (Craigslist)** : utiliser des annonces saisies par des particuliers — avec toutes les imperfections que cela impose (bruit dans les prix demandés, valeurs manquantes, fautes de frappe, descriptions inégales, biais déclaratif) — est un **parti pris business cohérent** avec la cible visée. Là où l'Argus ou KBB s'appuient sur des données de transactions professionnelles (concessionnaires, enchères, reprises) qui reflètent surtout le marché B2B, Craigslist reflète le **marché réel C2C** : celui des particuliers qui vendent et achètent au quotidien. Construire un modèle robuste à ce bruit, c'est :
+
+- **Adapter l'outil au plus grand nombre** : il fonctionne sur les annonces telles qu'elles existent réellement sur les sites de petites annonces, pas sur des données idéales que seuls les pros possèdent.
+- **Refléter le vrai prix de marché** : un prix demandé sur Craigslist reflète la psychologie de vente d'un particulier, ce qui est précisément l'information utile pour quelqu'un qui s'apprête à publier ou consulter une annonce.
+- **Démocratiser l'accès** : la pipeline de cleaning + modélisation construite ici est reproductible sur n'importe quelle plateforme C2C (LeBonCoin, AutoScout24, Marketplace…), pour peu qu'on dispose d'un export ou d'un scraping de leurs annonces.
+
 ---
 
 ## 2. Définition du problème et contexte ML
